@@ -1,0 +1,77 @@
+
+{{#if usuario}} 
+
+    <div>
+        <h1>Bienvenido {{usuario}}</h1>
+        <form method="get" action="/logout">
+        <input type="submit" value="Deslogear">
+        </form>
+    </div>
+
+
+    <div class="d-flex col-12 justify-content-center" id="formulario">
+        
+            <input type="text" id="title" placeholder="Nombre del producto">
+            <input type="number" id="price" placeholder="Precio del producto">
+            <input type="text" id="imgUrl" placeholder="url del producto">
+            <button onclick="addProduct()">Add Product</button>       
+        
+    </div>
+
+    <div class="d-flex col-12 justify-content-center ">
+        <table class="bg-secondary" style="width:50%">
+            <thead>
+                <tr>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Foto</th>
+                </tr>
+            </thead>
+        <tbody id="containerProductos">
+            {{#if hayDatos}}        
+                {{#each productos}}            
+                    <tr>
+                                
+                            <td class="text-center">{{title}} </td>
+                            <td class="text-center">{{price}}</td>
+                            <td class="text-center"><img src={{imgUrl}}></td>
+                        
+                    </tr>
+                {{/each}}
+            {{else}}
+            <th class="inline-block" id="noHayProductos">
+                <td class="text-center">no hay productos</td>  
+            </th>
+            {{/if}}
+        </tbody> 
+        </table>
+    </div>
+
+    <div id="chatContainer">
+
+        <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email" required>
+        <input type="text" class="form-control" id="mensaje" placeholder="Escribe algo...">               
+
+        <button onclick="addMsg()" class="btn btn-primary">Enviar Mensaje</button> 
+    
+        <div id="msgContainer" class="d-flex flex-row flex-wrap">
+            {{#each mensajes}}
+                <div class="d-flex flex-row col-12">            
+                    <h5 class="text-info p-2">{{user}}</h5>
+                    <h5 class="text-danger p-2">[{{time}}]</h5>
+                    <i class="text-success p-2">{{mensaje}}</i>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+{{else}}
+
+ 
+<div>
+    <form method="get" action="/login">
+        <input type="user" name="user">
+        <input type="submit">
+    </form>
+</div>
+    
+{{/if}}
