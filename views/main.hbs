@@ -1,77 +1,70 @@
+    {{#if usuario}} 
 
-{{#if usuario}} 
-
-    <div>
-        <h1>Bienvenido {{usuario}}</h1>
-        <form method="get" action="/logout">
-        <input type="submit" value="Deslogear">
-        </form>
-    </div>
-
-
-    <div class="d-flex col-12 justify-content-center" id="formulario">
-        
-            <input type="text" id="title" placeholder="Nombre del producto">
-            <input type="number" id="price" placeholder="Precio del producto">
-            <input type="text" id="imgUrl" placeholder="url del producto">
-            <button onclick="addProduct()">Add Product</button>       
-        
-    </div>
-
-    <div class="d-flex col-12 justify-content-center ">
-        <table class="bg-secondary" style="width:50%">
-            <thead>
-                <tr>
-                    <th class="text-center">Nombre</th>
-                    <th class="text-center">Precio</th>
-                    <th class="text-center">Foto</th>
-                </tr>
-            </thead>
-        <tbody id="containerProductos">
-            {{#if hayDatos}}        
-                {{#each productos}}            
-                    <tr>
-                                
-                            <td class="text-center">{{title}} </td>
-                            <td class="text-center">{{price}}</td>
-                            <td class="text-center"><img src={{imgUrl}}></td>
-                        
-                    </tr>
-                {{/each}}
-            {{else}}
-            <th class="inline-block" id="noHayProductos">
-                <td class="text-center">no hay productos</td>  
-            </th>
-            {{/if}}
-        </tbody> 
-        </table>
-    </div>
-
-    <div id="chatContainer">
-
-        <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email" required>
-        <input type="text" class="form-control" id="mensaje" placeholder="Escribe algo...">               
-
-        <button onclick="addMsg()" class="btn btn-primary">Enviar Mensaje</button> 
-    
-        <div id="msgContainer" class="d-flex flex-row flex-wrap">
-            {{#each mensajes}}
-                <div class="d-flex flex-row col-12">            
-                    <h5 class="text-info p-2">{{user}}</h5>
-                    <h5 class="text-danger p-2">[{{time}}]</h5>
-                    <i class="text-success p-2">{{mensaje}}</i>
-                </div>
-            {{/each}}
+        <div>
+            <h1>Bienvenido {{usuario}}</h1>
+            <form method="get" action="/logout">
+            <input type="submit" value="Deslogear">
+            </form>
         </div>
-    </div>
-{{else}}
+        
+        
+        <div id="chatContainer">
+
+            <form id='formMensajes'>
+                <div class='form-group'>
+                    <label for='email'>Email</label>
+                    <input class='form-control' type='email' name='email' id='email' required>
+                </div>
+                <div class='form-group'>
+                    <label for='nombre'>Nombre</label>
+                    <input class='form-control' type='text' name='nombre' id='nombre' required>
+                </div>
+                <div class='form-group'>
+                    <label for='apellido'>Apellido</label>
+                    <input class='form-control' type='text' name='apellido' id='apellido' required>
+                </div>
+                <div class='form-group'>
+                    <label for='alias'>Alias</label>
+                    <input class='form-control' type='text' name='alias' id='alias' required>
+                </div>
+                <div class='form-group'>
+                    <label for='edad'>Edad</label>
+                    <input class='form-control' type='number' name='edad' id='edad' required>
+                </div>
+                <div class='form-group'>
+                    <label for='avatar'>Avatar</label>
+                    <input class='form-control' type='text' name='avatar' id='avatar' required>
+                </div>
+                <div class='form-group'>
+                    <label for='mensaje'>Mensaje</label>
+                    <input class='form-control' type='mensaje' name='mensaje' id='mensaje' required>
+                </div>
+                <div class='mt-2'>
+                    <input type='submit' class='btn btn-warning'> 
+                </div>
+            </form>
+        
+            <div id="msgContainer" class="d-flex flex-row flex-wrap">
+                {{#each mensajes}}
+                    <div class="d-flex flex-row col-12">            
+                        <h5 class="text-info p-2">{{author.email}}</h5>
+                        <h5 class="text-danger p-2">[{{time}}]</h5>
+                        <i class="text-success p-2">{{text}}</i>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    {{else}}
 
  
-<div>
-    <form method="get" action="/login">
-        <input type="user" name="user">
-        <input type="submit">
-    </form>
-</div>
-    
+    <div>
+        <form method="get" action="/login">
+            <input type="user" name="user">
+            <input type="submit">
+        </form>
+    </div>
+        
 {{/if}}
+
+ 
+

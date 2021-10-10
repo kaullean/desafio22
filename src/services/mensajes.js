@@ -1,5 +1,20 @@
 import fs from 'fs'
 import path from 'path'
+import { normalize, schema } from 'normalizr';
+import util from 'util'
+const author = new schema.Entity('author',
+ {}, 
+ { idAttribute: 'email' });
+
+const msge = new schema.Entity(
+  'message',
+  {
+    author: author,
+  },
+  { idAttribute: 'time' }
+);
+
+const msgesSchema = new schema.Array(msge);
 
 class MensajesService {
     constructor(){
@@ -8,7 +23,16 @@ class MensajesService {
     }
     async leer(){
         this.mensajes=JSON.parse(await fs.promises.readFile(this.filePath, 'utf-8'));
-        return this.mensajes;
+        let messages = this.mensajes.map((aMsg) => ({
+            author: aMsg.author,
+            text: aMsg.text,
+            time:aMsg.time
+          }));
+        let normalizedMessages = normalize(messages, msgesSchema);
+       // console.log(util.inspect(normalizedMessages,true,5,true));
+        
+        return normalizedMessages;
+       // return this.mensajes;
     }
     async guardar(){
         await fs.promises.writeFile(
@@ -19,9 +43,7 @@ class MensajesService {
     async agregar(unMensaje){
 
         this.mensajes.push(unMensaje);
-
         await this.guardar();
-
         return unMensaje;
     }
  

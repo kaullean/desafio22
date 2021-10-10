@@ -22,13 +22,19 @@ class SocketService {
 
                 /* responde con los mensajes y los productos del historial */
                 socket.on('askData',async (data) =>{
-                    socket.emit('productos',productosService.leer())
-                    socket.emit('nuevo-mensaje',await mensajesService.leer())
+                    socket.emit('nuevo-mensaje',await mensajesService.leer())                   
                 })
                 
                 /*Escucha nuevos mensajes*/
                 socket.on('nuevo-mensaje', (data) => {
-                    data=formatoMensaje(data);
+                    console.log(data);
+                    if(data.length>0){
+                        console.log("soy un array");
+                        data.entities.message.forEach(mensaje => {
+                            this.myWSServer.emit('nuevoMensaje',mensaje)
+                        });
+                    }
+                    console.log("soy un mensaje");
                     mensajesService.agregar(data);
                     this.myWSServer.emit('nuevoMensaje',data)
                 })

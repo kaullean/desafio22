@@ -4,8 +4,25 @@ import handlebars from 'express-handlebars'
 import * as http from 'http';
 import { socketService } from './socket';
 import miRouter from '../routes/index';
-import session from 'express-session'
+import session, { Store } from 'express-session'
+import MongoStore from 'connect-mongo'
+import config from '../config';
+import cookieParser from 'cookie-parser';
 
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+const StoreOptions = {
+    store: MongoStore.create({
+      mongoUrl: config.MONGO_ATLAS_URL,
+      mongoOptions: advancedOptions,
+    }),
+
+    secret: 'secreto',
+    resave: false,
+    saveUninitialized: false ,
+    cookie: {
+        maxAge: 60000
+    } ,
+  };
 const app = express();
 
 const myHTTPServer = http.Server(app);
@@ -25,14 +42,9 @@ app.engine('hbs', handlebars({
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(
-    session({
-        secret:"esto es secreto",
-        coockie:{ maxAge: 5000 },
-        saveUninitialized:true,
-        resave:false,
-    })
-)
+app.use(cookieParser());
+app.use(session(StoreOptions))
+
 app.get('/login',(req,res) =>{
     
     const{user}=req.query
