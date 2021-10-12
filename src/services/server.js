@@ -8,6 +8,7 @@ import session, { Store } from 'express-session'
 import MongoStore from 'connect-mongo'
 import config from '../config';
 import cookieParser from 'cookie-parser';
+import passport from '../middlewares/auth'
 
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 const StoreOptions = {
@@ -41,42 +42,15 @@ app.engine('hbs', handlebars({
 }))
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session(StoreOptions))
 
-app.get('/login',(req,res) =>{
-    
-    const{user}=req.query
-    if(!user)
-    {
-        let data= {
-            layout: 'index'
-        }
-        res.render('main',data)
-    }
-    else{
-        req.session.logeado=true;
-        req.session.usuario=user;
-        let data= {
-            usuario:user,
-            layout: 'index'
-        }
-        res.render('main',data)
-        //res.json({msg:`bienvenido ${req.session.logeado}`})
-    }
-    
-})
-const validateLogIn = (req, res, next) => {
-    if (req.session.logeado) next();
-    else res.status(401).json({ msg: 'no estas autorizado' });
-};
-app.get('/logout',validateLogIn, (req, res) => {
-    req.session.destroy();
-    res.json({ msg: 'session destruida' });
-  });
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 
 /* Router */
-app.use('/',validateLogIn, miRouter)
+app.use('/', miRouter)
 
 export default myHTTPServer;

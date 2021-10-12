@@ -1,7 +1,15 @@
+import config from './config';
 import server from './services/server'
+import { connectDb } from './services/db';
 
-const puerto=8080;
+const puerto=config.PORT;
 
-server.listen(puerto, () => console.log("Server up "+puerto))
+connectDb().then(() => {
+    console.log('DB CONECTADA');
+    server.listen(puerto, () => console.log("Server up "+puerto))
+  
+    server.on('error', (error) => console.log(`Error en servidor: ${error}`));
+  });
+
 
 
